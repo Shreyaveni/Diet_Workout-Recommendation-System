@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Diet and Workout Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Personalized Diet & Workout Planner</h2>
+        <form action="/recommendations" method="POST">
+            <label>Dietary Preferences:</label>
+            <input type="text" name="dietary_preferences" placeholder="e.g., vegetarian, high-protein" required>
+
+            <label>Fitness Goals:</label>
+            <input type="text" name="fitness_goals" placeholder="e.g., weight loss, muscle gain" required>
+
+            <label>Lifestyle Factors:</label>
+            <input type="text" name="lifestyle_factors" placeholder="e.g., active, sedentary" required>
+
+            <label>Dietary Restrictions:</label>
+            <input type="text" name="dietary_restrictions" placeholder="e.g., gluten-free, lactose-intolerant" required>
+
+            <label>Health Conditions:</label>
+            <input type="text" name="health_conditions" placeholder="e.g., diabetes, high blood pressure" required>
+
+            <label>Your Query:</label>
+            <textarea name="user_query" placeholder="Describe your goal briefly" required></textarea>
+
+            <button type="submit">Get Recommendations</button>
+        </form>
+    </div>
+
+    <!-- Results Section -->
+    <div class="container">
+        {% if recommendations %}
+        <h2>Recommendations</h2>
+
+        <!-- Action Buttons -->
+        <div class="result-buttons">
+            <button onclick="showModal('dietModal')">View Diet Types</button>
+            <button onclick="showModal('workoutModal')">View Workout Options</button>
+            <button onclick="showModal('breakfastModal')">View Breakfast Ideas</button>
+            <button onclick="showModal('dinnerModal')">View Dinner Options</button>
+            <button onclick="showModal('tipsModal')">View Additional Tips</button>
+        </div>
+        {% endif %}
+    </div>
+<!-- Modals -->
+<div id="dietModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('dietModal')">&times;</span>
+        <h3>Diet Types</h3>
+        <ul>
+            {% for diet in recommendations.diet_types %}
+                <li>{{ diet }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div id="workoutModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('workoutModal')">&times;</span>
+        <h3>Workout Options</h3>
+        <ul>
+            {% for workout in recommendations.workouts %}
+                <li>{{ workout }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div id="breakfastModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('breakfastModal')">&times;</span>
+        <h3>Breakfast Ideas</h3>
+        <ul>
+            {% for breakfast in recommendations.breakfasts %}
+                <li>{{ breakfast }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div id="dinnerModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('dinnerModal')">&times;</span>
+        <h3>Dinner Options</h3>
+        <ul>
+            {% for dinner in recommendations.dinners %}
+                <li>{{ dinner }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div id="tipsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('tipsModal')">&times;</span>
+        <h3>Additional Tips</h3>
+        <ul>
+            {% for tip in recommendations.additional_tips %}
+                <li>{{ tip }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script>
+    function showModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+    }
+
+    // Close modals when clicking outside of them
+    window.onclick = function(event) {
+        const modals = document.getElementsByClassName("modal");
+        for (let i = 0; i < modals.length; i++) {
+            if (event.target == modals[i]) {
+                modals[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
